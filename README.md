@@ -4,11 +4,11 @@ This part of the project is all about giving users full control over their subsc
 
 # Key Features
 
-    Easy Subscription Creation: Users can quickly add new subscriptions, providing simple details like the service name, price, and how often they're charged. Our system automatically calculates the next renewal date for them.
+**Easy Subscription Creation**: Users can quickly add new subscriptions, providing simple details like the service name, price, and how often they're charged. Our system automatically calculates the next renewal date for them.
 
-    Smart Validation: The application double-checks all the information entered to make sure it's correct. If you try to enter an invalid currency, for example, it will let you know right away.
+**Smart Validation**: The application double-checks all the information entered to make sure it's correct. If you try to enter an invalid currency, for example, it will let you know right away.
 
-    Automated Email Reminders: Forgetfulness is a thing of the past! As soon as a subscription is created, a workflow is set up to send timely email reminders before the renewal date. This gives users a heads-up so they can decide whether to keep or cancel the subscription.
+**Automated Email Reminders**: Forgetfulness is a thing of the past! As soon as a subscription is created, a workflow is set up to send timely email reminders before the renewal date. This gives users a heads-up so they can decide whether to keep or cancel the subscription.
 
 # Behind the Scenes
 
