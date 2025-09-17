@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   username: { 
      type: String,
      required :[ true,'username is required' ] , 
@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
      lowercase : true, 
      minlength : 5, 
      maxlength : 50 , 
-     match : [/\S+@\S+\.\S+/ , 'Please fill a valid email address'] },
+     match : [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,'Please fill a valid email address'] },
   password: { 
     type: String, 
     required: true },
@@ -23,6 +23,6 @@ const userSchema = new mongoose.Schema({
     default: Date.now },
 },{timestamps: true});
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", UserSchema);
 
 export default User;
