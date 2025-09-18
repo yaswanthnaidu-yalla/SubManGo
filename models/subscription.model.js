@@ -17,11 +17,11 @@ const subscriptionSchema = new mongoose.Schema({
 
     startDate: { type: Date, required: true ,default: Date.now, validate:{validator:(value)=>value <= new Date(),message: 'start must be in the past or now'} },
     
-    RenewalDate: { type: Date, required: true , validate:{validator:function(value){return value > this.startDate()},message: 'Renewal date must be after start date'} },
+    RenewalDate: { type: Date, required: false , validate:{validator:function(value){return value > this.startDate()},message: 'Renewal date must be after start date'} },
 
     endDate: { type: Date },
     
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true , index: true},
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false , index: true},
 
 }, { timestamps: true });
 
