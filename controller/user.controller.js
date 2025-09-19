@@ -18,7 +18,7 @@ const getUser = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: 'User fetched successfully',
-            data: User
+            data: user
         });
         if (!User) {
             const error = new Error('User not found');
