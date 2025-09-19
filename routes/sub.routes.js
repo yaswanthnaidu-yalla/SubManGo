@@ -1,19 +1,21 @@
 import { Router } from "express";
 import authorize from "../middlewear/auth.middlewear.js";
-import { createsubscription } from "../controller/sub.controller.js";
+
+import { cancelSubscription, createsubscription, deleteSubscription, getSubscriptionDetails, updateSubscription, renewSubscription, welcomethingy } from "../controller/sub.controller.js";
 import { getAllSubscriptions } from "../controller/sub.controller.js";
+import errorMiddlewear from "../middlewear/error.middlewear.js";
 
 const subscriptionrouter = Router();
 
 
-subscriptionrouter.get('/', (req, res) => res.send({title:'GET Subscriptions'}));
-subscriptionrouter.get('/:id', (req, res) => res.send({title:'GET Subscription details'}));
-subscriptionrouter.post('/', authorize,createsubscription);
-subscriptionrouter.put('/:id', (req, res) => res.send({title:'UPDATE current Subscriptions'}));
-subscriptionrouter.delete(':id', (req, res) => res.send({title:'DELETE Subscriptions'}));
-subscriptionrouter.get('/user/:id',authorize,getAllSubscriptions);
-subscriptionrouter.put('/:id/cancel', (req, res) => res.send({title:'CANCEL Subscriptions'}));
-subscriptionrouter.put('/:id/renew', (req, res) => res.send({title:'RENEW Subscriptions'}));
+subscriptionrouter.get('/', authorize,errorMiddlewear,welcomethingy);
+subscriptionrouter.get('/:id', authorize,errorMiddlewear,getSubscriptionDetails);
+subscriptionrouter.post('/', authorize,errorMiddlewear,createsubscription);
+subscriptionrouter.put('/:id', authorize,errorMiddlewear,updateSubscription);
+subscriptionrouter.delete(':id',authorize,errorMiddlewear, deleteSubscription);
+subscriptionrouter.get('/user/:id',authorize,errorMiddlewear,getAllSubscriptions);
+subscriptionrouter.put('/:id/cancel', authorize,errorMiddlewear,cancelSubscription);
+subscriptionrouter.put('/:id/renew', authorize,errorMiddlewear,renewSubscription);
 
 
 export default subscriptionrouter;
