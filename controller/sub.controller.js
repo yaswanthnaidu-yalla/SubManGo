@@ -1,5 +1,7 @@
+import { WorkflowClient } from '../config/upstash.js';
 import Subscription from '../models/subscription.model.js';
 import mongoose from 'mongoose';
+import { SERVER_URL } from '../config/env.js';
 
 
 export const welcomethingy = async (req, res, next) => {
@@ -29,24 +31,25 @@ export const createsubscription = async (req, res, next) => {
       userId: req.user._id, 
       ...req.body,
     });
-
-    res.status(201).json({
-      success: true,
-      message: 'Subscription created successfully',
-      data: subscription,
-    });
+        const{workflowRunId}=await WorkflowClient.trigger({
+            url: `${SERVER_URL}/api/v1/workflow/sendreminders`,
+            body: { subscriptionId: subscription._id },
+            headers: { 'Content-Type': 'application/json' },
+            
+            retries: 0,
+        });
+    
         res.status(201).json({
             success: true,
             message: 'Subscription created successfully',
             data: subscription
+        });
+            
+        } catch (error) {
+            console.error('Error creating subscription:', error);
+            next(error);
         }
-        )
-        
-    } catch (error) {
-        console.error('Error creating subscription:', error);
-        next(error);
-        
-    }}
+    }
     export const getAllSubscriptions = async (req, res, next) => {
   try {
     // Log the incoming user ID from the URL
@@ -204,6 +207,19 @@ export const renewSubscription = async (req, res, next) => {
 
     } catch (error) {
         console.error('Error renewing subscription:', error);
+        next(error);
+    }
+};
+export const getSubscriptions = async (req, res, next) => {
+    try {
+        const subscriptions = await Subscription.find({});
+        res.status(200).json({
+            success: true,
+            message: 'All subscriptions retrieved successfully.',
+            subscriptions
+        });
+    } catch (error) {
+        console.error('Error getting all subscriptions:', error);
         next(error);
     }
 };
