@@ -1,10 +1,9 @@
 import { Router } from "express";
 import authorize from "../middlewear/auth.middlewear.js";
 
-import { cancelSubscription, createsubscription, deleteSubscription, getSubscriptionDetails, updateSubscription, renewSubscription, welcomethingy , getSubscriptions} from "../controller/sub.controller.js";
+import { cancelSubscription, createsubscription, deleteSubscription, getSubscriptionDetails, updateSubscription, renewSubscription, welcomethingy } from "../controller/sub.controller.js";
 import { getAllSubscriptions } from "../controller/sub.controller.js";
 import errorMiddlewear from "../middlewear/error.middlewear.js";
-import { get } from "mongoose";
 
 const subscriptionrouter = Router();
 
@@ -17,6 +16,6 @@ subscriptionrouter.delete(':id',authorize,errorMiddlewear, deleteSubscription);
 subscriptionrouter.get('/user/:id',authorize,errorMiddlewear,getAllSubscriptions);
 subscriptionrouter.put('/:id/cancel', authorize,errorMiddlewear,cancelSubscription);
 subscriptionrouter.put('/:id/renew', authorize,errorMiddlewear,renewSubscription);
-subscriptionrouter.get('/onlyadminpls', getAllSubscriptions);
+
 
 export default subscriptionrouter;
