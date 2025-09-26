@@ -21,7 +21,7 @@ const subscriptionSchema = new mongoose.Schema({
 
     endDate: { type: Date },
     
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false, index: true},
+    userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false, index: true},
 
 }, { timestamps: true });
 

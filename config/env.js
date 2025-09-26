@@ -13,5 +13,3 @@ export const {ARCJET_ENV} = process.env.ARCJET_ENV ;
 export const {ARCJET_KEY} = process.env.ARCJET_KEY ;
 export const {SERVER_URL} = process.env.SERVER_URL;
    
-export const {QSTASH_URL} = process.env.QSTASH_URL ;
-export const {QSTASH_TOKEN} = process.env.QSTASH_TOKEN ;

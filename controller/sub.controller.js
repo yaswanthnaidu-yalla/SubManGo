@@ -1,10 +1,8 @@
 
-
-import { Client } from '@upstash/workflow'; // Import the Client class
 import Subscription from '../models/subscription.model.js';
 
 import mongoose from 'mongoose';
-const workflowClient = new Client({ token: process.env.QSTASH_TOKEN }); 
+
 
 
 
@@ -35,33 +33,14 @@ export const createsubscription = async (req, res, next) => {
             ...req.body,
         });
 
-        let workflowRunId = null;
-
-        try {
-            const upstashResponse = await workflowClient.trigger({
-                url: `${process.env.SERVER_URL}/api/v1/workflows/subscription/reminder`,
-                body: {
-                    subscriptionId: subscription._id,
-                },
-                headers: {
-                    'content-type': 'application/json',
-                },
-                retries: 0,
-            });
-
-            if (upstashResponse && upstashResponse.workflowRunId) {
-                workflowRunId = upstashResponse.workflowRunId;
-            }
-        } catch (upstashError) {
-            console.error('Failed to trigger Upstash workflow:', upstashError);
-        }
+        
 
         res.status(201).json({
             success: true,
-            message: 'Subscription created and workflow triggered successfully',
+            message: 'Subscription created ',
             data: {
                 ...subscription.toObject(),
-                workflowRunId: workflowRunId,
+            
             }
         });
 
@@ -72,19 +51,18 @@ export const createsubscription = async (req, res, next) => {
 };
     export const getAllSubscriptions = async (req, res, next) => {
   try {
-    // Log the incoming user ID from the URL
+    
     console.log('User ID from URL:', req.params.id);
 
-    // Log the query object that will be sent to the database
+    
     const query = { userId: req.params.id };
     console.log('MongoDB Query:', query);
 
     const subscriptions = await Subscription.find(query);
 
-    // Log the number of documents found
+    
     console.log('Found subscriptions count:', subscriptions.length);
-
-    // Log the actual data that was found
+    
     console.log('Found subscriptions:', subscriptions);
 
     res.status(200).json({
