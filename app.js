@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use('/api/v1/auth', authrouter);
 app.use('/api/v1/users', userrouter);
 app.use('/api/v1/subscriptions', subscriptionrouter);
-app.use('/api/v1/reminders', reminderrouter);
+app.use('/api/v1/', reminderrouter);
 
 
 app.use(errorMiddlewear);
