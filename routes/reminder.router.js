@@ -4,7 +4,7 @@ import authorize from "../middlewear/auth.middlewear.js";
 import { sendRemindersController } from "../controller/reminder.js";
 
 const reminderrouter = Router()
-reminderrouter.post('/reminders',authorize, sendRemindersController);
+reminderrouter.post('/',authorize, sendRemindersController);
 
 
 
