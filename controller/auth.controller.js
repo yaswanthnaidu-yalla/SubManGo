@@ -65,7 +65,7 @@ export const signIN =async (req,res,next) => {
             error.statusCode = 401;
             throw error;
         }
-        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn:"2d"});
+        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn:"7d"});
         res.status(200).json({
             success: true,
             message: 'User logged in successfully',
@@ -76,6 +76,7 @@ export const signIN =async (req,res,next) => {
                 token
             }
         });
+        console.log(token)
 
     } catch (error) {
         return next(error);

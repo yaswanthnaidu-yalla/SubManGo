@@ -8,6 +8,8 @@ import subscriptionrouter from './routes/sub.routes.js';
 import authrouter from './routes/auth.routes.js';
 import errorMiddlewear from './middlewear/error.middlewear.js';
 import cookieParser from 'cookie-parser';
+import reminderrouter from './routes/reminder.router.js';
+
 
 
 
@@ -25,6 +27,7 @@ app.use(cookieParser());
 app.use('/api/v1/auth', authrouter);
 app.use('/api/v1/users', userrouter);
 app.use('/api/v1/subscriptions', subscriptionrouter);
+app.use('/api/v1/reminders/send', reminderrouter);
 
 
 app.use(errorMiddlewear);
