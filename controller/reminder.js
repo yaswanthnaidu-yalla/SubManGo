@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 // import { sendEmail } from '../utils/emailSender.js';
 
 const REMINDER_DAYS = [1, 3, 7];
+console.log('request recieved!');
 
 export const sendRemindersController = async (req, res) => {
     try {
