@@ -1,5 +1,12 @@
+
+
+import { Client } from '@upstash/workflow'; // Import the Client class
 import Subscription from '../models/subscription.model.js';
+
 import mongoose from 'mongoose';
+const workflowClient = new Client({ token: process.env.QSTASH_TOKEN }); 
+
+
 
 
 export const welcomethingy = async (req, res, next) => {
@@ -19,34 +26,50 @@ export const welcomethingy = async (req, res, next) => {
 };
 export const createsubscription = async (req, res, next) => {
     try {
-        
-        
         if (!req.body.name || !req.body.price || !req.body.billingCycle || !req.body.category) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
-         const subscription = await Subscription.create({
-      // Change 'user' to 'userId' to match the schema
-      userId: req.user._id, 
-      ...req.body,
-    });
+        
+        const subscription = await Subscription.create({
+            userId: req.user._id, 
+            ...req.body,
+        });
 
-    res.status(201).json({
-      success: true,
-      message: 'Subscription created successfully',
-      data: subscription,
-    });
+        let workflowRunId = null;
+
+        try {
+            const upstashResponse = await workflowClient.trigger({
+                url: `${process.env.SERVER_URL}/api/v1/workflows/subscription/reminder`,
+                body: {
+                    subscriptionId: subscription._id,
+                },
+                headers: {
+                    'content-type': 'application/json',
+                },
+                retries: 0,
+            });
+
+            if (upstashResponse && upstashResponse.workflowRunId) {
+                workflowRunId = upstashResponse.workflowRunId;
+            }
+        } catch (upstashError) {
+            console.error('Failed to trigger Upstash workflow:', upstashError);
+        }
+
         res.status(201).json({
             success: true,
-            message: 'Subscription created successfully',
-            data: subscription
-        }
-        )
-        
+            message: 'Subscription created and workflow triggered successfully',
+            data: {
+                ...subscription.toObject(),
+                workflowRunId: workflowRunId,
+            }
+        });
+
     } catch (error) {
         console.error('Error creating subscription:', error);
         next(error);
-        
-    }}
+    }
+};
     export const getAllSubscriptions = async (req, res, next) => {
   try {
     // Log the incoming user ID from the URL
@@ -204,6 +227,19 @@ export const renewSubscription = async (req, res, next) => {
 
     } catch (error) {
         console.error('Error renewing subscription:', error);
+        next(error);
+    }
+};
+export const getSubscriptions = async (req, res, next) => {
+    try {
+        const subscriptions = await Subscription.find({});
+        res.status(200).json({
+            success: true,
+            message: 'All subscriptions retrieved successfully.',
+            subscriptions
+        });
+    } catch (error) {
+        console.error('Error getting all subscriptions:', error);
         next(error);
     }
 };

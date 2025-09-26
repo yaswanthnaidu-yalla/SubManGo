@@ -2,14 +2,14 @@ import dotenv from 'dotenv';
 import path from 'path';
 dotenv.config({ path: path.resolve(process.cwd(), `.env.development.local`) });
 import express from 'express';
-import http from 'http';
-import arcjet, { shield, detectBot, tokenBucket } from "@arcjet/node";
 import ajmw from './middlewear/ajmw.js';
 import userrouter from './routes/user.routes.js';
 import subscriptionrouter from './routes/sub.routes.js';
 import authrouter from './routes/auth.routes.js';
 import errorMiddlewear from './middlewear/error.middlewear.js';
 import cookieParser from 'cookie-parser';
+
+
 
 
 
@@ -21,9 +21,12 @@ app.use(ajmw);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use('/api/v1/auth', authrouter);
 app.use('/api/v1/users', userrouter);
 app.use('/api/v1/subscriptions', subscriptionrouter);
-app.use('/api/v1/auth', authrouter);
+
+
 app.use(errorMiddlewear);
 
 app.get('/', (req, res) => {
