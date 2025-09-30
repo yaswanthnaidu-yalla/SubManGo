@@ -3,6 +3,8 @@ import Subscription from '../models/subscription.model.js';
 
 import mongoose from 'mongoose';
 
+import { sendRemindersController } from './reminder.js';
+
 
 
 
@@ -32,6 +34,20 @@ export const createsubscription = async (req, res, next) => {
             userId: req.user._id, 
             ...req.body,
         });
+        const reminderReq = {
+           body: {
+        subscriptionsToRemind: [subscription]
+        }
+    };
+    const reminderRes = {
+        status: () => ({
+            json: (response) => {
+                console.log('Reminder controller response:', response.message);
+            }
+        })
+    };
+    
+    await sendRemindersController(reminderReq, reminderRes);
 
         
 
