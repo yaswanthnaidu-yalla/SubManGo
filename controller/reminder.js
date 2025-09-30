@@ -7,8 +7,6 @@ console.log('request recieved!');
 
 export const sendRemindersController = async (req, res) => {
     try {
-
-
         const today = dayjs().startOf('day');
 
         const subscriptionsToRemind = await Subscription.find({
@@ -25,9 +23,9 @@ export const sendRemindersController = async (req, res) => {
 
             if (REMINDER_DAYS.includes(daysUntilRenewal)) {
                 console.log(`Sending a ${daysUntilRenewal}-day reminder for subscription ${subscription._id}`);
+                // email logic here soon
             }
         }
-
         return res.status(200).json({ message: 'Reminders processed successfully.' });
     } catch (error) {
         console.error('Error in sendRemindersController:', error);
