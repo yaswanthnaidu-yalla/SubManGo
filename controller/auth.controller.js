@@ -23,31 +23,26 @@ export const signUP = async(req,res,next) => {
          const newUser = await User.create([{username, email, password: hashedPassword}], {session});
 
             const token = jwt.sign({userId: newUser[0]._id}, process.env.JWT_SECRET, {expiresIn:"2d"});
+            
             await session.commitTransaction();
-            session.endSession();
+            
             res.status(201).json({
                 success: true,
                 message: 'User created successfully',
-                
-                
-                
-                data:{userId: newUser[0]._id,
+                data:{
+                    userId: newUser[0]._id,
                     name: newUser[0].username,
                     email: newUser[0].email,
-                    password: newUser[0].hashedPassword ,
-                    token}
-
+                    token
+                }
             });
+            
         
-
-
-
-        await session.commitTransaction();
-
-}catch (error) {
+    } catch (error) {
         await session.abortTransaction();
-        session.endSession();
         return next(error);
+    } finally {
+        session.endSession();
     }
 }
 export const signIN =async (req,res,next) => {
@@ -76,7 +71,7 @@ export const signIN =async (req,res,next) => {
                 token
             }
         });
-        console.log(token)
+        
 
     } catch (error) {
         return next(error);

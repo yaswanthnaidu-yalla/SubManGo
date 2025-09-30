@@ -1,8 +1,8 @@
 import Subscription from '../models/subscription.model.js';
 import dayjs from 'dayjs';
-// import { sendEmail } from '../utils/emailSender.js';
+import { sendEmail } from '../utils/sendEmials.js';
 
-const REMINDER_DAYS = [1, 3, 7];
+const REMINDER_DAYS = [7, 5, 2, 1];
 
 
 export const sendRemindersController = async (req, res) => {
@@ -24,7 +24,11 @@ export const sendRemindersController = async (req, res) => {
 
             if (REMINDER_DAYS.includes(daysUntilRenewal)) {
                 console.log(`Sending a ${daysUntilRenewal}-day reminder for subscription ${subscription._id}`);
-                
+                await sendEmail({
+                    to: subscription.user.email,
+                    type: reminder.label.subscription,
+                    
+                });
             }
         }
         return res.status(200).json({ message: 'Reminders processed successfully.' });
@@ -32,4 +36,4 @@ export const sendRemindersController = async (req, res) => {
         console.error('Error in sendRemindersController:', error);
         return res.status(500).json({ message: 'Internal server error' });
     }
-};
+}; 
