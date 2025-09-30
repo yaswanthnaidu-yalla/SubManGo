@@ -82,6 +82,9 @@ Clean, intuitive API endpoints following REST best practices for easy integratio
 -----
 
 ### 🚀 Getting Started
+```
+Everything here can be customised
+```
 
 #### Prerequisites
 
@@ -321,17 +324,14 @@ SubManGo/
 ├── src/
 │   ├── config/                # DB & email config
 │   ├── controllers/           # Request handlers
+|   ├── database/              # Databse
 │   ├── models/                # Mongoose schemas
 │   ├── routes/                # API routes
-│   ├── services/              # Business logic (email, subscription)
 │   ├── utils/                 # Validators & date calculators
 │   ├── middleware/            # Error handling & validation
-│   ├── cron/                  # Cron jobs
-│   └── app.js                 # Express app setup
-├── tests/                     # Unit & integration tests
 ├── .env.example               # Environment template
+├── app.js
 ├── package.json
-├── server.js                  # Server entry point
 └── README.md
 ```
 
