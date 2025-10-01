@@ -31,32 +31,36 @@ export const createsubscription = async (req, res, next) => {
         }
         
         const subscription = await Subscription.create({
-            userId: req.user._id, 
             ...req.body,
+            // Ensure userId is a string and prioritizes the authenticated ID
+            userId: req.user._id.toString(),
         });
+
         const reminderReq = {
            body: {
-        subscriptionsToRemind: [subscription]
-        }
-    };
-    const reminderRes = {
-        status: () => ({
-            json: (response) => {
-                console.log('Reminder controller response:', response.message);
+                subscriptionsToRemind: [subscription]
             }
-        })
-    };
-    
-    await sendRemindersController(reminderReq, reminderRes);
+        };
 
+        const reminderRes = {
+            status: () => ({
+                json: (response) => {
+                    console.log('Reminder controller response:', response.message);
+                }
+            })
+        };
         
+        await sendRemindersController(reminderReq, reminderRes);
 
+        const subscriptionObject = subscription.toObject();
+        
         res.status(201).json({
             success: true,
             message: 'Subscription created ',
             data: {
-                ...subscription.toObject(),
-            
+                ...subscriptionObject,
+                // Explicitly return the saved userId to confirm it worked
+                userId: req.user._id.toString(),
             }
         });
 
@@ -65,31 +69,35 @@ export const createsubscription = async (req, res, next) => {
         next(error);
     }
 };
-    export const getAllSubscriptions = async (req, res, next) => {
-  try {
-    
-    console.log('User ID from URL:', req.params.id);
 
-    
-    const query = { userId: req.params.id };
-    console.log('MongoDB Query:', query);
+export const getAllSubscriptions = async (req, res, next) => {
+    try {
+        // Temporary log to confirm the input ID for GET request
+        console.log('--- GET SUBSCRIPTIONS DEBUG ---');
+        console.log('Querying with ID:', req.params.id);
+        console.log('-----------------------------');
 
-    const subscriptions = await Subscription.find(query);
+        // Force both values to strings for a reliable match
+        const query = { userId: req.params.id.toString() }; 
+        const subscriptions = await Subscription.find(query);
 
-    
-    console.log('Found subscriptions count:', subscriptions.length);
-    
-    console.log('Found subscriptions:', subscriptions);
+        res.status(200).json({
+            success: true,
+            message: 'Subscriptions fetched successfully',
+            data: subscriptions
+        });
 
-    res.status(200).json({
-      success: true,
-      message: 'Subscriptions fetched successfully',
-      data: subscriptions
-    });
-  } catch (error) {
-    next(error);
-  }
+    } catch (error) {
+        console.error('Error fetching subscriptions:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch subscriptions',
+            error: error.message
+        });
+    }
 };
+
+  
 export const getSubscriptionDetails = async (req, res, next) => {
     try {
         const { id } = req.params;

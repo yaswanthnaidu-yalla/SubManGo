@@ -12,7 +12,7 @@ subscriptionrouter.get('/', authorize,errorMiddlewear,welcomethingy);
 subscriptionrouter.get('/:id', authorize,errorMiddlewear,getSubscriptionDetails);
 subscriptionrouter.post('/', authorize,errorMiddlewear,createsubscription);
 subscriptionrouter.put('/:id', authorize,errorMiddlewear,updateSubscription);
-subscriptionrouter.delete(':id',authorize,errorMiddlewear, deleteSubscription);
+subscriptionrouter.delete('/:id',authorize,errorMiddlewear, deleteSubscription);
 subscriptionrouter.get('/user/:id',authorize,errorMiddlewear,getAllSubscriptions);
 subscriptionrouter.put('/:id/cancel', authorize,errorMiddlewear,cancelSubscription);
 subscriptionrouter.put('/:id/renew', authorize,errorMiddlewear,renewSubscription);

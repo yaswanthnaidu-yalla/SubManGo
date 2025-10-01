@@ -21,9 +21,15 @@ const subscriptionSchema = new mongoose.Schema({
 
     endDate: { type: Date },
     
-    userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false, index: true},
+    // FIX 1: Changed userID to userId (lowercase i) for consistency
+    // FIX 2: Removed 'required: false' to make it required by the controller
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true}, 
 
-}, { timestamps: true });
+}, { 
+    timestamps: true,
+    // FIX 3: Explicitly set collection name to prevent pluralization issues
+    collection: 'subscriptions' 
+});
 
 subscriptionSchema.pre('save', function (next) {
     if (!this.RenewalDate) {
@@ -33,9 +39,12 @@ subscriptionSchema.pre('save', function (next) {
             monthly: 30,
             yearly: 365
         };
+        // Assuming 'monthly' is 30 days and 'yearly' is 365 days for this calculation
+        const days = this.billingCycle === 'monthly' ? 30 : 365;
         this.RenewalDate = new Date(this.startDate);
-        this.RenewalDate.setDate(this.RenewalDate.getDate() + renewalPeriod[this.billingCycle]);
+        this.RenewalDate.setDate(this.RenewalDate.getDate() + days);
     }
+    // Logic to check if RenewalDate is in the past
     if (this.RenewalDate < new Date()) {
         this.status = 'expired';
     }
