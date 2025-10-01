@@ -189,8 +189,10 @@ The API will be available at `http://localhost:8080`.
   "message": "Subscription created successfully"
 }
 ```
+<img width="1088" height="715" alt="createsub" src="https://github.com/user-attachments/assets/a75e328c-02f3-4b69-a898-dd2711e62de0" />
 
-##### `GET /api/v1/subscriptions` - Get All Subscriptions
+
+##### `GET /api/v1/subscriptions/user/:id` - Get All Subscriptions
 
 **Response (200 OK):**
 
@@ -218,6 +220,7 @@ The API will be available at `http://localhost:8080`.
   "count": 2
 }
 ```
+<img width="1186" height="715" alt="getallsubs" src="https://github.com/user-attachments/assets/c2331c75-6d0e-4b0c-bc91-de5066a6d55a" />
 
 ##### `GET /api/v1/subscriptions/:id` - Get a Single Subscription
 
@@ -240,6 +243,7 @@ The API will be available at `http://localhost:8080`.
   }
 }
 ```
+<img width="1088" height="715" alt="getsubbyid" src="https://github.com/user-attachments/assets/37d80f79-5039-4d89-842c-e7b7fe9f2821" />
 
 ##### `PUT /api/v1/subscriptions/:id` - Update a Subscription
 
@@ -266,6 +270,7 @@ The API will be available at `http://localhost:8080`.
   "message": "Subscription updated successfully"
 }
 ```
+<img width="1088" height="715" alt="subupdate" src="https://github.com/user-attachments/assets/1087c27d-2f30-4722-b262-d2561c3dde51" />
 
 ##### `DELETE /api/v1/subscriptions/:id` - Delete a Subscription
 
@@ -277,6 +282,7 @@ The API will be available at `http://localhost:8080`.
   "message": "Subscription deleted successfully"
 }
 ```
+<img width="1088" height="715" alt="deletesub" src="https://github.com/user-attachments/assets/dd785d3a-cb37-49b5-af16-596552d76a72" />
 
 **Error Response Format:**
 
@@ -316,6 +322,7 @@ curl http://localhost:8080/api/v1/subscriptions
 ```
 
 -----
+
 
 ### 📁 Project Structure
 
