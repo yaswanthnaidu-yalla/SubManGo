@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import {DB_URI} from "../config/env.js";
 
 const connectDB = async () => {
     const DB_URI = process.env.DB_URI;

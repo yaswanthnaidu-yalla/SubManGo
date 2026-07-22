@@ -1,3 +1,5 @@
+import dns from 'dns';
+dns.setServers(['8.8.8.8', '8.8.4.4']); // Google DNS, IPv4
 import dotenv from 'dotenv';
 import path from 'path';
 dotenv.config({ path: path.resolve(process.cwd(), `.env.development.local`) });
@@ -8,7 +10,8 @@ import subscriptionrouter from './routes/sub.routes.js';
 import authrouter from './routes/auth.routes.js';
 import errorMiddlewear from './middlewear/error.middlewear.js';
 import cookieParser from 'cookie-parser';
-import reminderrouter from './routes/reminder.router.js';
+
+import workflowRouter from './routes/workflow.routes.js';
 
 
 
@@ -27,7 +30,8 @@ app.use(cookieParser());
 app.use('/api/v1/auth', authrouter);
 app.use('/api/v1/users', userrouter);
 app.use('/api/v1/subscriptions', subscriptionrouter);
-app.use('/api/v1/reminders', reminderrouter);
+app.use('/api/v1/workflows', workflowRouter)
+
 
 
 app.use(errorMiddlewear);
@@ -35,6 +39,7 @@ app.use(errorMiddlewear);
 app.get('/', (req, res) => {
   res.send('Welcome to the SubManGo ');
 });
+
 
 app.listen(port, async () => {
   console.log(`Server is running on port http://localhost:${port}`);

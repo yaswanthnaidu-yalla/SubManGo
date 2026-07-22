@@ -2,8 +2,9 @@
 import Subscription from '../models/subscription.model.js';
 
 import mongoose from 'mongoose';
+const SERVER_URL = process.env.SERVER_URL || 'http://localhost:5500';
 
-import { sendRemindersController } from './reminder.js';
+import { workflowClient } from '../config/upstash.js';
 
 
 
@@ -35,22 +36,15 @@ export const createsubscription = async (req, res, next) => {
             // Ensure userId is a string and prioritizes the authenticated ID
             userId: req.user._id.toString(),
         });
+        console.log('About to trigger workflow for subscription:', subscription._id.toString());
 
-        const reminderReq = {
-           body: {
-                subscriptionsToRemind: [subscription]
-            }
-        };
+        const{workflowRunId}=await workflowClient.trigger({
+            url: `${SERVER_URL}/api/v1/workflows/subscription/reminder`,
+            body: { subscriptionId: subscription._id.toString() },
+        });
+        console.log('SERVER_URL used for workflow callback:', SERVER_URL);
+        console.log('Workflow triggered, ID:', workflowRunId);
 
-        const reminderRes = {
-            status: () => ({
-                json: (response) => {
-                    console.log('Reminder controller response:', response.message);
-                }
-            })
-        };
-        
-        await sendRemindersController(reminderReq, reminderRes);
 
         const subscriptionObject = subscription.toObject();
         
@@ -61,6 +55,7 @@ export const createsubscription = async (req, res, next) => {
                 ...subscriptionObject,
                 // Explicitly return the saved userId to confirm it worked
                 userId: req.user._id.toString(),
+                workflowRunId
             }
         });
 
