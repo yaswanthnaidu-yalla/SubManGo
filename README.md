@@ -10,7 +10,7 @@
 
 
 -----
-Live at: submango.vercel.app
+Live at: [link](https://sub-man-go.vercel.app/)
 
 
 ### Smart Subscription Management API built with Node.js
