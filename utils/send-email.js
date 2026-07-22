@@ -1,6 +1,6 @@
 import { emailTemplates } from "../utils/emailtemplate.js"; 
 import transporter from "../config/nodemailer.js";
-import { accountEmail } from "../config/env.js";
+import { accountEmail } from "../config/nodemailer.js";
 import dayjs from "dayjs";
 export const sendRemainderEmail = async (options) => {
     const { to, type, subscription } = options;
