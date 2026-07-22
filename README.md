@@ -1,4 +1,4 @@
-# 🥭 SubManGo
+#  SubManGo
  ```                                                                                         
   _________    ___.       _____                  ________        
  /   _____/__ _\_ |__    /     \ _____    ____  /  _____/  ____  
@@ -19,7 +19,7 @@ Never miss a subscription renewal again\! **SubManGo** is a smart, automated API
 
 -----
 
-### 📸 Project Overview
+### Project Overview
 
 SubManGo provides a complete backend solution for managing recurring payments and subscriptions. It's built with a robust architecture to ensure reliability and ease of use.
 
@@ -29,21 +29,21 @@ API → Backend (Node.js/Express) → MongoDB → Email Workflow (Nodemailer)
 
 #### The Problem
 
-  * 💸 Surprise charges from forgotten subscriptions.
-  * 📅 No centralized tracking of renewal dates.
-  * 📧 Manual reminder systems are unreliable.
+  * Surprise charges from forgotten subscriptions.
+  * No centralized tracking of renewal dates.
+  * Manual reminder systems are unreliable.
 
 #### The Solution
 
 SubManGo provides a RESTful API that solves these problems by:
-✅ Automatically calculating renewal dates.
-✅ Scheduling and sending email reminders via cron jobs.
-✅ Validating subscription data in real-time.
-✅ Managing subscriptions through simple API calls.
+- Automatically calculating renewal dates.
+- Scheduling and sending email reminders via Upstash Workflows.
+- Validating subscription data in real-time.
+- Managing subscriptions through simple API calls.
 
 -----
 
-### ✨ Key Features
+###  Key Features
 
 #### 1\. Easy Subscription Creation
 
@@ -59,7 +59,7 @@ The API performs real-time validation for:
 
 #### 3\. Automated Email Reminders
 
-Cron jobs automatically check for upcoming renewals daily and send timely email notifications via Nodemailer, handling multiple subscriptions efficiently.
+Dedicated workflow that automatically checks for upcoming renewals daily and send timely email notifications via Nodemailer, handling multiple subscriptions efficiently.
 
 #### 4\. RESTful API Design
 
@@ -67,7 +67,7 @@ Clean, intuitive API endpoints following REST best practices for easy integratio
 
 -----
 
-### 🛠️ Tech Stack
+###  Tech Stack
 
 | Category        | Technology          |
 | --------------- | ------------------- |
@@ -75,13 +75,13 @@ Clean, intuitive API endpoints following REST best practices for easy integratio
 | **Framework** | Express.js          |
 | **Database** | MongoDB             |
 | **Email Service** | Nodemailer (SMTP)   |
-| **Background Jobs**| Node-cron           |
+| **Workflow**| UpStash Workflow           |
 | **Deployment** | Render              |
 | **Validation** | Express-validator   |
 
 -----
 
-### 🚀 Getting Started
+###  Getting Started
 ```
 Everything here can be customised
 ```
@@ -127,10 +127,9 @@ Everything here can be customised
     SMTP_PASSWORD=your-app-password
     EMAIL_FROM=your-email@gmail.com
 
-    # Server & Cron Configuration
+    # Server 
     PORT=8080
-    REMINDER_DAYS_BEFORE=7
-    CRON_SCHEDULE='0 9 * * *'  # Runs daily at 9 AM
+    
     ```
 
 #### Start the Server
@@ -148,7 +147,7 @@ The API will be available at `http://localhost:8080`.
 
 -----
 
-### 📚 API Documentation
+###  API Documentation
 
 #### Base URL
 
@@ -298,7 +297,7 @@ The API will be available at `http://localhost:8080`.
 
 -----
 
-### 🧪 Testing
+###  Testing
 
   * **Run all tests:** `npm test`
   * **Run tests with coverage:** `npm run test:coverage`
@@ -324,27 +323,30 @@ curl http://localhost:8080/api/v1/subscriptions
 -----
 
 
-### 📁 Project Structure
+###  Project Structure
 
 ```
 SubManGo/
-├── src/
-│   ├── config/                # DB & email config
-│   ├── controllers/           # Request handlers
-|   ├── database/              # Databse
-│   ├── models/                # Mongoose schemas
-│   ├── routes/                # API routes
-│   ├── utils/                 # Validators & date calculators
-│   ├── middleware/            # Error handling & validation
-├── .env.example               # Environment template
+├── DATABASE/       # Database connection setup
+├── config/         # App & email configuration
+├── controller/     # Request handlers
+├── docs/           # Additional documentation
+├── middlewear/     # Error handling & request validation
+├── models/         # Mongoose schemas
+├── routes/         # API route definitions
+├── screenshots/    # README reference images
+├── utils/          # Validators & date calculators
+├── .gitignore
 ├── app.js
+├── eslint.config.js
+├── eslint.config.mjs
 ├── package.json
 └── README.md
 ```
 
 -----
 
-### 🎯 How It Works
+###  How It Works
 
 #### Subscription Creation Flow
 
@@ -356,28 +358,16 @@ SubManGo/
 
 #### Email Reminder System
 
-1.  **Cron Job:** A daily cron job runs at a scheduled time (default 9 AM).
-2.  **Find Renewals:** It queries the database for subscriptions with a `next_renewal` date in the next `REMINDER_DAYS_BEFORE` days.
-3.  **Send Emails:** For each found subscription, an email is composed and sent using Nodemailer.
-4.  **Status Update:** The `reminder_sent` status is updated to prevent duplicate emails.
+1. **Workflow Trigger:** When a subscription is created, an Upstash Workflow run is triggered immediately.
+2. **Sleep Until Reminder:** The workflow calculates the reminder date (next_renewal minus REMINDER_DAYS_BEFORE) and sleeps until that point using Upstash Workflow's durable sleep, without consuming compute while waiting.
+3. **Send Email:** When the workflow wakes up, it composes and sends the reminder email via Nodemailer.
+4. **Status Update:** The workflow updates the reminder_sent status to prevent duplicate emails.
 
-**Cron Job Code Example:**
 
-```javascript
-// Runs daily at 9:00 AM
-cron.schedule('0 9 * * *', async () => {
-  const subscriptions = await findUpcomingRenewals(7); // 7 days ahead
-  
-  subscriptions.forEach(async (sub) => {
-    await sendReminderEmail(sub);
-    console.log(`Reminder sent for ${sub.service_name}`);
-  });
-});
-```
 
 -----
 
-### 🔧 Configuration Options
+###  Configuration Options
 
 #### Billing Cycles Supported
 
@@ -400,17 +390,13 @@ const SUPPORTED_CURRENCIES = [
 ];
 ```
 
-#### Email Reminder Schedule
 
-  * **Default:** 7 days before renewal
-  * **Configurable via:** `REMINDER_DAYS_BEFORE` environment variable
-  * **Cron schedule:** `CRON_SCHEDULE` environment variable
 
 -----
 
-### 🐛 Known Issues
+###  Known Issues
 
-None at the moment\! 🎉 If you find any bugs, please open an issue on the repository.
+None at the moment\! If you find any bugs, please open an issue on the repository.
 
 -----
 
