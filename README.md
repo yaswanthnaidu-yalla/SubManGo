@@ -10,7 +10,7 @@
 
 
 -----
-
+Live at: [link](sub-man-go.vercel.app)
 
 
 ### Smart Subscription Management API built with Node.js
@@ -153,7 +153,7 @@ The API will be available at `http://localhost:8080`.
 #### Base URL
 
   * **Local:** `http://localhost:8080/api/v1`
-  * **Production:** `https://submango.onrender.com/api/v1` (Replace with your own URL)
+  * **Production:** `sub-man-go.vercel.app` (Replace with your own URL)
 
 #### Endpoints
 
