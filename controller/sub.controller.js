@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 const SERVER_URL = process.env.SERVER_URL || 'http://localhost:5500';
 
 import { workflowClient } from '../config/upstash.js';
-
+import  transporter  from '../config/nodemailer.js';
 
 
 
@@ -36,7 +36,18 @@ export const createsubscription = async (req, res, next) => {
             // Ensure userId is a string and prioritizes the authenticated ID
             userId: req.user._id.toString(),
         });
+
+        
+
+        
         console.log('About to trigger workflow for subscription:', subscription._id.toString());
+        transporter.verify((error, success) => {
+            if (error) {
+              console.error('SMTP Connection Error:', error);
+            } else {
+              console.log('Server is ready to take our messages');
+          }
+        });
 
         const{workflowRunId}=await workflowClient.trigger({
             url: `${SERVER_URL}/api/v1/workflows/subscription/reminder`,

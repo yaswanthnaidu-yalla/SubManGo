@@ -13,7 +13,7 @@ export const generateEmailTemplate = ({
     <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
         <tr>
             <td style="background-color: #4a90e2; padding: 20px 30px; text-align: center;">
-                <p style="font-size: 54px; line-height: 54px; font-weight: 800;">SubDub</p>
+                <p style="font-size: 54px; line-height: 54px; font-weight: 800;">SubManGo</p>
             </td>
         </tr>
         <tr>
@@ -68,33 +68,27 @@ export const generateEmailTemplate = ({
 
 export const emailTemplates = [
   {
-    label: "7 days before reminder",
+    label: "Reminder 7 days before",
     generateSubject: (data) =>
       `📅 Reminder: Your ${data.subscriptionName} Subscription Renews in 7 Days!`,
     generateBody: (data) => generateEmailTemplate({ ...data, daysLeft: 7 }),
   },
   {
-    label: "5 days before reminder",
+    label: "Reminder 5 days before",
     generateSubject: (data) =>
       `⏳ ${data.subscriptionName} Renews in 5 Days – Stay Subscribed!`,
     generateBody: (data) => generateEmailTemplate({ ...data, daysLeft: 5 }),
   },
   {
-    label: "2 days before reminder",
+    label: "Reminder 2 days before",
     generateSubject: (data) =>
       `🚀 2 Days Left!  ${data.subscriptionName} Subscription Renewal`,
     generateBody: (data) => generateEmailTemplate({ ...data, daysLeft: 2 }),
   },
   {
-    label: "1 day before reminder",
+    label: "Reminder 1 days before",
     generateSubject: (data) =>
       `⚡ Final Reminder: ${data.subscriptionName} Renews Tomorrow!`,
     generateBody: (data) => generateEmailTemplate({ ...data, daysLeft: 1 }),
-  },
-  {
-    label: "Final day reminder",
-    generateSubject: (data) =>
-      `✅ ${data.subscriptionName} Renews Today – You’re All Set!`,
-    generateBody: (data) => generateEmailTemplate({ ...data, daysLeft: 0 }),
   },
 ];
